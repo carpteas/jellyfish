@@ -15,7 +15,7 @@
   "license": "MIT",
   "main": "./",
   "scripts": {
-    "start": "node http-server",
+    "start": "node http-server"
   },
   "engines": {
     "node": "~0.10.0 || ~0.12.0 || ^4.2.0"
