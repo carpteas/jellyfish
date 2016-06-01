@@ -7,7 +7,7 @@ var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   if (!Boolean(req.params['username']) || !Boolean(req.params['password'])) {
-  	return next(new restify.errors.BadRequestError('missing either username or password'));
+  	return next(new restify.BadRequestError('missing either username or password'));
   }
 
   var one = new User({
@@ -18,7 +18,7 @@ module.exports = function(req, res, next) {
   one.save(function(err) {
     if (err) {
       req.log.error(err, 'failed on User.save()');
-      return next(new restify.errors.InternalServerError('failed while saving to database'));
+      return next(new restify.InternalServerError('failed while saving to database'));
     }
 
     return next(res.send({ success: true }));

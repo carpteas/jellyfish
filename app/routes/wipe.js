@@ -7,7 +7,7 @@ var file_manager 	= require('app/models/file_manager.js');
 module.exports = function(req, res, next) {
   file_manager.checkRandom(req.random, next, function(isExisting) {
     if (!isExisting) {
-      return next(new restify.errors.BadRequestError('no target file to be wiped out'));
+      return next(new restify.BadRequestError('no target file to be wiped out'));
     }
 
     file_manager.deleteFile(req.random, req.key, next, res);

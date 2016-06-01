@@ -21,7 +21,7 @@ module.exports = function(req, res, next) {
     User.findOne({ name: decoded.username }, function(err, user) {
       if (err) {
         req.log.error(err, 'failed on User.findOne()');
-        return next(new restify.errors.InternalServerError('failed while reading from database'));
+        return next(new restify.InternalServerError('failed while reading from database'));
       }
 
       if (!user) {

@@ -9,13 +9,13 @@ var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   if (!Boolean(req.params['username']) || !Boolean(req.params['password'])) {
-    return next(new restify.errors.BadRequestError('missing either username or password'));
+    return next(new restify.BadRequestError('missing either username or password'));
   }
 
   User.findOne({ name: req.params['username'] }, function(err, user) {
     if (err) {
       req.log.error(err, 'failed on User.findOne()');
-      return next(new restify.errors.InternalServerError('failed while reading from database'));
+      return next(new restify.InternalServerError('failed while reading from database'));
     }
 
     if (!user) {
@@ -33,7 +33,7 @@ module.exports = function(req, res, next) {
     }, function(err, token) {
       if (err) {
         req.log.error(err, 'failed on jwt.sign(): %s', 'user');
-        return next(new restify.errors.InternalServerError('failed while generating token'));
+        return next(new restify.InternalServerError('failed while generating token'));
       }
 
       user.lastToken = token;
@@ -41,7 +41,7 @@ module.exports = function(req, res, next) {
       user.save(function(err) {
         if (err) {
           req.log.error(err, 'failed on User.save()');
-          return next(new restify.errors.InternalServerError('failed while saving to database'));
+          return next(new restify.InternalServerError('failed while saving to database'));
         }
 
         req.log.trace('[%s]\'s lastVisit = %s', user.name, user.lastVisit);

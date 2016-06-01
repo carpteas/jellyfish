@@ -12,12 +12,29 @@ var register        = require('app/routes/register.js');
 var sink            = require('app/routes/sink.js');
 var users           = require('app/routes/users.js');
 var wipe            = require('app/routes/wipe.js');
+var administrate    = require('app/handlers/administrate.js');
 var authorize       = require('app/handlers/authorize.js');
 var validate        = require('app/handlers/validate.js');
 var config          = require('config.js');
 var logger          = require('util.js').logger;
 
 mongoose.connect(process.env.MONGODB_URI || config.database);
+
+var admin = restify.createServer({
+  log: logger
+});
+
+admin.pre(morgan('tiny'));
+admin.use(restify.requestLogger(), restify.bodyParser({
+  mapParams: true
+}));
+admin.use(administrate);
+admin.post('/register', register);
+admin.get('/users', users);
+
+admin.listen(config.port + 1, function() {
+  logger.info('admin now running ....');
+});
 
 var api = restify.createServer({
   log: logger
@@ -28,8 +45,6 @@ api.use(restify.requestLogger(), restify.bodyParser({
   mapParams: true
 }));
 api.get('/', index);
-api.post('/register', register);
-api.get('/users', users);
 api.post('/api/authenticate', authenticate);
 api.use(authorize);
 api.get('/api/files', files);
