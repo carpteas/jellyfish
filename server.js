@@ -7,6 +7,7 @@ var restify         = require('restify');
 var authenticate    = require('app/routes/authenticate.js');
 var index           = require('app/routes/index.js');
 var files           = require('app/routes/files.js');
+var list            = require('app/routes/list.js');
 var load            = require('app/routes/load.js');
 var register        = require('app/routes/register.js');
 var sink            = require('app/routes/sink.js');
@@ -29,15 +30,15 @@ api.use(restify.requestLogger(), restify.bodyParser({
   mapParams: true
 }));
 api.get('/', index);
+api.get(config.pathRegex, validate, load);
 api.post('/register', administrate, register);
 api.get('/users', administrate, users);
+api.get('/files', administrate, files);
 api.post('/api/authenticate', authenticate);
 api.use(authorize);
-api.get('/api/files', files);
-api.use(validate);
-api.put(config.pathRegex, sink);
-api.del(config.pathRegex, wipe);
-api.get(config.pathRegex, load);
+api.get('/api/list', list);
+api.put(config.pathRegex, validate, sink);
+api.del(config.pathRegex, validate, wipe);
 
 api.listen(process.env.PORT || config.port, function() {
   logger.info('jellyfish now running ....');
