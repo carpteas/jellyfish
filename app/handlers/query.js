@@ -6,7 +6,7 @@ var config          = require('config.js');
 var util            = require('util.js');
 
 module.exports = function(req, res, next) {
-  req.username = 'yuyo';
+  req.username = req.query.u;
 
   return next();
 };

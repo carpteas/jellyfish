@@ -10,7 +10,7 @@ module.exports.checkRandom = function(random, next, callback) {
   File.count({ randomness: random }, function(err, count) {
     if (err) {
       util.logger.error(err, 'failed on File.count()');
-      return next(new restify.InternalServerError('failed while reading from database'));
+      next.ifError(new restify.InternalServerError('failed while reading from database'));
     }
 
     callback(count !== 0);
@@ -23,7 +23,7 @@ module.exports.readFile = function(random, key, next, res) {
   var file = util.s3.getObject({ Bucket: config.s3Bucket, Key: random + '/' + key });
   file.on('error', function(err) {
     util.logger.error(err, 'failed on S3.getObject()');
-    return next(new restify.NotFoundError('file not found inside S3'));
+    next.ifError(new restify.NotFoundError('file not found inside S3'));
   });
 
   file.createReadStream().pipe(res);
@@ -41,7 +41,7 @@ module.exports.createFile = function(random, username, path, name, ext, next, ca
   one.save(function(err) {
     if (err) {
       util.logger.error(err, 'failed on File.save()');
-      return next(new restify.InternalServerError('failed while saving to database'));
+      next.ifError(new restify.InternalServerError('failed while saving to database'));
     }
 
     callback();
@@ -52,14 +52,14 @@ module.exports.updateFile = function(random, next, callback) {
   File.findOne({ randomness: random }, function(err, file) {
     if (err) {
       util.logger.error(err, 'failed on File.findOne()');
-      return next(new restify.InternalServerError('failed while reading from database'));
+      next.ifError(new restify.InternalServerError('failed while reading from database'));
     }
 
     file.lastUpdate = new Date;
     file.save(function(err) {
       if (err) {
         util.logger.error(err, 'failed on File.save()');
-        return next(new restify.InternalServerError('failed while saving to database'));
+        next.ifError(new restify.InternalServerError('failed while saving to database'));
       }
 
       callback();
@@ -71,7 +71,7 @@ module.exports.deleteFile = function(random, key, next, res) {
   File.remove({ randomness: random }, function(err, file) {
     if (err) {
       util.logger.error(err, 'failed on File.remove()');
-      return next(new restify.InternalServerError('failed while saving to database'));
+      next.ifError(new restify.InternalServerError('failed while saving to database'));
     }
 
     util.s3.deleteObjects({
@@ -80,7 +80,7 @@ module.exports.deleteFile = function(random, key, next, res) {
     }, function(err, data) {
         if (err) {
           util.logger.error(err, 'failed on S3.deleteObjects()');
-          return next(new restify.InternalServerError('failed while deleting S3 objects'));
+          next.ifError(new restify.InternalServerError('failed while deleting S3 objects'));
         }
 
         return next(res.send({ success: true }));
@@ -99,7 +99,7 @@ module.exports.signOperation = function(type, random, key, next, res) {
   util.s3.getSignedUrl(type, options, function(err, data) {
     if (err) {
       util.logger.error(err, 'failed on S3.getSignedUrl()');
-      return next(new restify.InternalServerError('failed while signing S3 operation'));
+      next.ifError(new restify.InternalServerError('failed while signing S3 operation'));
     }
 
     return next(res.send({ signedUrl: data }));

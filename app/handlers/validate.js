@@ -10,7 +10,7 @@ module.exports = function(req, res, next) {
   if (req.params[2] !== '') {
     var subs = req.params[2].split('\/');
     subs.forEach(function(sub) {
-      if (!Boolean(sub)) return next(new restify.BadRequestError("bad directory url :("));
+      if (!Boolean(sub)) next.ifError(new restify.BadRequestError("bad directory url :("));
     })
   }
 
