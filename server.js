@@ -4,17 +4,17 @@ var mongoose        = require('mongoose');
 var morgan          = require('morgan');
 var restify         = require('restify');
 
-var authenticate    = require('/app/routes/authenticate');
-var index           = require('/app/routes/index');
-var list            = require('/app/routes/list');
-var load            = require('/app/routes/load');
-var register        = require('/app/routes/register');
-var sink            = require('/app/routes/sink');
-var wipe            = require('/app/routes/wipe');
-var authorize       = require('/app/handlers/authorize');
-var validate        = require('/app/handlers/validate');
-var config          = require('/config');
-var logger          = require('/util').logger;
+var authenticate    = require('app/routes/authenticate.js');
+var index           = require('app/routes/index.js');
+var list            = require('app/routes/list.js');
+var load            = require('app/routes/load.js');
+var register        = require('app/routes/register.js');
+var sink            = require('app/routes/sink.js');
+var wipe            = require('app/routes/wipe.js');
+var authorize       = require('app/handlers/authorize.js');
+var validate        = require('app/handlers/validate.js');
+var config          = require('config.js');
+var logger          = require('util.js').logger;
 
 mongoose.connect(process.env.MONGODB_URI || config.database);
 

@@ -3,8 +3,8 @@
 var jwt             = require('jsonwebtoken');
 var restify         = require('restify');
 
-var User            = require('/app/models/user');
-var config          = require('/config');
+var User            = require('app/models/user.js');
+var config          = require('config.js');
 
 module.exports = function(req, res, next) {
   var token = req.headers['x-access-token'];

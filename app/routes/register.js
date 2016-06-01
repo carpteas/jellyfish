@@ -2,8 +2,8 @@
 
 var restify         = require('restify');
 
-var User            = require('/app/models/user');
-var util            = require('/util');
+var User            = require('app/models/user.js');
+var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   if (!Boolean(req.params['username']) || !Boolean(req.params['password'])) {

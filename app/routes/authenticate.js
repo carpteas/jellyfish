@@ -3,9 +3,9 @@
 var jwt             = require('jsonwebtoken');
 var restify         = require('restify');
 
-var User            = require('/app/models/user');
-var config          = require('/config');
-var util            = require('/util');
+var User            = require('app/models/user.js');
+var config          = require('config.js');
+var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   if (!Boolean(req.params['username']) || !Boolean(req.params['password'])) {

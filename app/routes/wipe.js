@@ -2,7 +2,7 @@
 
 var restify         = require('restify');
 
-var file_manager 	= require('/app/models/file_manager');
+var file_manager 	= require('app/models/file_manager.js');
 
 module.exports = function(req, res, next) {
   file_manager.checkRandom(req.random, next, function(isExisting) {

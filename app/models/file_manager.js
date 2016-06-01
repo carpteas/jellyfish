@@ -2,9 +2,9 @@
 
 var restify         = require('restify');
 
-var File            = require('/app/models/file');
-var config          = require('/config');
-var util            = require('/util');
+var File            = require('app/models/file.js');
+var config          = require('config.js');
+var util            = require('util.js');
 
 module.exports.checkRandom = function(random, next, callback) {
   File.count({ randomness: random }, function(err, count) {

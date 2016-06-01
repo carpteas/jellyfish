@@ -4,7 +4,7 @@ var aws             = require('aws-sdk');
 var bunyan          = require('bunyan');
 var crypto          = require('crypto');
 
-var config          = require('/config');
+var config          = require('config.js');
 
 const LOGGER = bunyan.createLogger({
   name: 'jellyfish',

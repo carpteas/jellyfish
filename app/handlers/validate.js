@@ -2,8 +2,8 @@
 
 var restify         = require('restify');
 
-var config          = require('/config');
-var util            = require('/util');
+var config          = require('config.js');
+var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   // config.pathRegex === /^\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/
