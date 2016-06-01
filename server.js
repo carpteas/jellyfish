@@ -20,22 +20,6 @@ var logger          = require('util.js').logger;
 
 mongoose.connect(process.env.MONGODB_URI || config.database);
 
-var admin = restify.createServer({
-  log: logger
-});
-
-admin.pre(morgan('tiny'));
-admin.use(restify.requestLogger(), restify.bodyParser({
-  mapParams: true
-}));
-admin.use(administrate);
-admin.post('/register', register);
-admin.get('/users', users);
-
-admin.listen(config.port + 1, function() {
-  logger.info('admin now running ....');
-});
-
 var api = restify.createServer({
   log: logger
 });
@@ -45,6 +29,8 @@ api.use(restify.requestLogger(), restify.bodyParser({
   mapParams: true
 }));
 api.get('/', index);
+api.post('/register', administrate, register);
+api.get('/users', administrate, users);
 api.post('/api/authenticate', authenticate);
 api.use(authorize);
 api.get('/api/files', files);
