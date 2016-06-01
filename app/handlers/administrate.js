@@ -15,4 +15,6 @@ module.exports = function(req, res, next) {
   if (awsAccess !== config.awsAccess || awsSecret !== config.awsSecret) {
     return next(new restify.ForbiddenError('not allowed, you bastard'));
   }
+
+  return next();
 };
