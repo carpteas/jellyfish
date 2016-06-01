@@ -12,7 +12,7 @@ module.exports = function(req, res, next) {
     return next(new restify.BadRequestError('missing either username or password'));
   }
 
-  if (awsAccess !== config.awsAccess || awsSecret !== config.awsSecret) {
+  if (awsAccess !== config.awsAccess || awsSecret !== (process.env.SECRET_ACCESS || config.awsSecret)) {
     return next(new restify.ForbiddenError('not allowed, you bastard'));
   }
 
