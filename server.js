@@ -16,6 +16,7 @@ var wipe            = require('app/routes/wipe.js');
 var administrate    = require('app/handlers/administrate.js');
 var authorize       = require('app/handlers/authorize.js');
 var validate        = require('app/handlers/validate.js');
+var whois        	= require('app/handlers/whois.js');
 var config          = require('config.js');
 var logger          = require('util.js').logger;
 
@@ -30,7 +31,7 @@ api.use(restify.requestLogger(), restify.bodyParser({
   mapParams: true
 }));
 api.get('/', index);
-api.get(config.pathRegex, validate, load);
+api.get(config.pathRegex, whois, validate, load);
 api.post('/register', administrate, register);
 api.get('/users', administrate, users);
 api.get('/files', administrate, files);

@@ -17,6 +17,16 @@ module.exports.checkRandom = function(random, next, callback) {
   });
 };
 
+module.exports.readFile = function(random, key, next, res) {
+  var file = util.s3.getObject({ Bucket: random, Key: key });
+  file.on('error', function(err) {
+    util.logger.error(err, 'failed on S3.getObject()');
+    return next(new restify.NotFoundError('file not found inside S3'));
+  });
+
+  file.createReadStream().pipe(res);
+};
+
 module.exports.createFile = function(random, username, path, name, ext, next, callback) {
   var one = new File({
     randomness: random,
@@ -90,6 +100,6 @@ module.exports.signOperation = function(type, random, key, next, res) {
       return next(new restify.InternalServerError('failed while signing S3 operation'));
     }
 
-    return next(res.send({ signed: data }));
+    return next(res.send({ signedUrl: data }));
   });
 };
