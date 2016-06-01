@@ -1,0 +1,20 @@
+{
+  "name": "jellyfish",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./server",
+  "scripts": {
+    "start": "node server | bunyan"
+  },
+  "author": "richard.peng",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.3.16",
+    "bunyan": "^1.8.1",
+    "jsonwebtoken": "^7.0.0",
+    "mongoose": "^4.4.19",
+    "node-uuid": "^1.4.7",
+    "restify": "^4.1.0",
+    "verror": "^1.6.1"
+  }
+}
