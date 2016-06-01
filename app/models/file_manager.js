@@ -18,7 +18,9 @@ module.exports.checkRandom = function(random, next, callback) {
 };
 
 module.exports.readFile = function(random, key, next, res) {
-  var file = util.s3.getObject({ Bucket: random, Key: key });
+  util.logger.info('reading [%s]/%s', random, key);
+
+  var file = util.s3.getObject({ Bucket: config.s3Bucket, Key: random + '/' + key });
   file.on('error', function(err) {
     util.logger.error(err, 'failed on S3.getObject()');
     return next(new restify.NotFoundError('file not found inside S3'));
