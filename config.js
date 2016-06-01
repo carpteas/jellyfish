@@ -4,9 +4,9 @@ var uuid            = require('node-uuid');
 
 module.exports = {
   'algorithm': 'HS256',
-  'awsAccess': 'AKIAIYD2SCCBHXGE743Q',
+  'awsAccess': 'AKIAJQ75TXVUWG3LPMVQ',
   'awsRegion': 'ap-northeast-1',
-  'awsSecret': '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',
+  'awsSecret': '',
   'database': 'mongodb://localhost:27017/test',
   'expiresIn': '30m',
   'hmac': 'sha256',

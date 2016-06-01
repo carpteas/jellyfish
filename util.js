@@ -27,7 +27,7 @@ LOGGER.info('logger setup ready ....');
 
 aws.config.update({
   accessKeyId: config.awsAccess,
-  secretAccessKey: config.awsSecret,
+  secretAccessKey: process.env.SECRET_ACCESS || config.awsSecret,
   region: config.awsRegion
 });
 const S3 = new aws.S3();

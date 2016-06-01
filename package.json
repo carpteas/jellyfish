@@ -4,7 +4,7 @@
   "description": "",
   "main": "./server",
   "scripts": {
-    "start": "node server | bunyan"
+    "start": "NODE_PATH=. node server | bunyan"
   },
   "author": "richard.peng",
   "license": "ISC",
