@@ -29,7 +29,7 @@ api.use(restify.requestLogger(), restify.bodyParser({
 }));
 api.get('/', index);
 api.post('/register', register);
-api.post('/users', users);
+api.get('/users', users);
 api.post('/api/authenticate', authenticate);
 api.use(authorize);
 api.get('/api/files', files);
