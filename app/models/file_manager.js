@@ -20,7 +20,7 @@ module.exports.isExisting = function(random, name, ext, next, callback) {
 module.exports.readFile = function(bucket, random, key, next, res) {
   util.logger.info('reading [%s]/%s', random, key);
 
-  var file = util.s3.getObject({ Bucket: util.getBucket(bucket), Key: random + '/' + key });
+  var file = util.s3.getObject({ Bucket: bucket, Key: random + '/' + key });
   file.on('error', function(err) {
     util.logger.error(err, 'failed on S3.getObject()');
     next.ifError(new restify.NotFoundError('file not found inside S3'));
@@ -75,7 +75,7 @@ module.exports.deleteFile = function(bucket, random, name, ext, key, next, res) 
     }
 
     util.s3.deleteObjects({
-      Bucket: util.getBucket(bucket),
+      Bucket: bucket,
       Delete: { Objects: [{ Key: random + '/' + key }] }
     }, function(err, data) {
         if (err) {
@@ -90,7 +90,7 @@ module.exports.deleteFile = function(bucket, random, name, ext, key, next, res) 
 
 module.exports.signOperation = function(type, bucket, random, key, next, res) {
   var options = {
-    Bucket: util.getBucket(bucket),
+    Bucket: bucket,
     Key: random + '/' + key,
     Expires: config.s3Vanish,
     ACL: 'private'
