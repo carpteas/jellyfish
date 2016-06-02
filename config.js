@@ -10,6 +10,8 @@ module.exports = {
   'database': 'mongodb://localhost:27017/test',
   'expiresIn': '30m',
   'hmac': 'sha256',
+  'logError': './jellyfish-error.log',
+  'logLevel': 'info',
   'readRegex': /^\/\bdock\b\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
   'writeRegex': /^\/\bapi\b\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
   'port': 8888,

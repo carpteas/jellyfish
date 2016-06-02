@@ -10,13 +10,13 @@ const LOGGER = bunyan.createLogger({
   name: 'jellyfish',
   streams: [
     {
-      level: 'info',
+      level: config.logLevel,
       stream: process.stdout
     },
     {
       level: 'error',
       type: 'rotating-file',
-      path: './jellyfish-error.log',
+      path: config.logError,
       period: '1d',
       count: 7
     }

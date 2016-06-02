@@ -9,7 +9,7 @@ module.exports = function(req, res, next) {
         file_manager.signOperation('putObject', req.username, req.random, req.key, next, res);
       });
     } else {
-      req.log.warn('randomness[%s] already exists', req.random);
+      req.log.warn('[%s]/%s.%s already exists, UPDATE instead of CREATE', req.random, req.filename, req.fileext);
 
       file_manager.updateFile(req.random, next, function() {
         file_manager.signOperation('putObject', req.username, req.random, req.key, next, res);
