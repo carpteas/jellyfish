@@ -23,6 +23,7 @@ const LOGGER = bunyan.createLogger({
   ],
   serializers: bunyan.stdSerializers
 });
+module.exports.logger = LOGGER;
 LOGGER.info('logger setup ready ....');
 
 aws.config.update({
@@ -31,13 +32,24 @@ aws.config.update({
   region: config.awsRegion
 });
 const S3 = new aws.S3();
+module.exports.s3 = S3;
 LOGGER.info('s3 setup ready ....');
 
-module.exports.logger = LOGGER;
-module.exports.s3 = S3;
 module.exports.hash = function(password, salt) {
   var hash = crypto.createHmac(config.hmac, salt);
   hash.update(password);
 
   return hash.digest('hex');
+};
+
+module.exports.getBucket = function(username) {
+  return 'jellyfish-carpteas-' + username;
+};
+
+module.exports.getRandom = function(filepath, bucket) {
+  return module.exports.hash(filepath, bucket);
+};
+
+module.exports.getKey = function(filename, fileext) {
+  return filename + '.' + fileext;
 };

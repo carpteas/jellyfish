@@ -17,10 +17,10 @@ module.exports.checkRandom = function(random, next, callback) {
   });
 };
 
-module.exports.readFile = function(random, key, next, res) {
+module.exports.readFile = function(bucket, random, key, next, res) {
   util.logger.info('reading [%s]/%s', random, key);
 
-  var file = util.s3.getObject({ Bucket: config.s3Bucket, Key: random + '/' + key });
+  var file = util.s3.getObject({ Bucket: util.getBucket(bucket), Key: random + '/' + key });
   file.on('error', function(err) {
     util.logger.error(err, 'failed on S3.getObject()');
     next.ifError(new restify.NotFoundError('file not found inside S3'));
@@ -67,7 +67,7 @@ module.exports.updateFile = function(random, next, callback) {
   });
 };
 
-module.exports.deleteFile = function(random, key, next, res) {
+module.exports.deleteFile = function(bucket, random, key, next, res) {
   File.remove({ randomness: random }, function(err, file) {
     if (err) {
       util.logger.error(err, 'failed on File.remove()');
@@ -75,7 +75,7 @@ module.exports.deleteFile = function(random, key, next, res) {
     }
 
     util.s3.deleteObjects({
-      Bucket: config.s3Bucket,
+      Bucket: util.getBucket(bucket),
       Delete: { Objects: [{ Key: random + '/' + key }, { Key: random }] }
     }, function(err, data) {
         if (err) {
@@ -88,9 +88,9 @@ module.exports.deleteFile = function(random, key, next, res) {
   });
 };
 
-module.exports.signOperation = function(type, random, key, next, res) {
+module.exports.signOperation = function(type, bucket, random, key, next, res) {
   var options = {
-    Bucket: config.s3Bucket,
+    Bucket: util.getBucket(bucket),
     Key: random + '/' + key,
     Expires: config.s3Vanish,
     ACL: 'private'

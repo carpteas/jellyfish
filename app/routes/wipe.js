@@ -8,6 +8,6 @@ module.exports = function(req, res, next) {
   file_manager.checkRandom(req.random, next, function(isExisting) {
     if (!isExisting) next.ifError(new restify.BadRequestError('file not found to wipe out'));
 
-    file_manager.deleteFile(req.random, req.key, next, res);
+    file_manager.deleteFile(req.username, req.random, req.key, next, res);
   });
 };

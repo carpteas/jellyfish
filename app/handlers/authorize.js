@@ -32,7 +32,7 @@ module.exports = function(req, res, next) {
         next.ifError(new restify.ForbiddenError('token overridden and thus expired :('));
       }
 
-      req.log.trace(JSON.stringify(decoded));
+      // req.log.trace(JSON.stringify(decoded));
       req.username = user.name;
       return next();
     });

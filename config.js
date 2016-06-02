@@ -10,9 +10,9 @@ module.exports = {
   'database': 'mongodb://localhost:27017/test',
   'expiresIn': '30m',
   'hmac': 'sha256',
-  'pathRegex': /^\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
+  'readRegex': /^\/\bstored\b\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
+  'writeRegex': /^\/\balter\b\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
   'port': 8888,
   'secret': uuid.v4(),
-  's3Bucket': 'jellyfish.carpteas',
-  's3Vanish': 60
+  's3Vanish': 10
 };

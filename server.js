@@ -32,15 +32,15 @@ api.use(
   restify.queryParser({ mapParams: false }),
   restify.bodyParser({ mapParams: true }));
 api.get('/', index);
-api.get(config.pathRegex, query, validate, load);
+api.get(config.readRegex, query, validate, load);
 api.post('/register', administrate, register);
 api.get('/users', administrate, users);
 api.get('/files', administrate, files);
 api.post('/api/authenticate', authenticate);
 api.use(authorize);
 api.get('/api/list', list);
-api.put(config.pathRegex, validate, sink);
-api.del(config.pathRegex, validate, wipe);
+api.put(config.writeRegex, validate, sink);
+api.del(config.writeRegex, validate, wipe);
 
 api.listen(process.env.PORT || config.port, function() {
   logger.info('jellyfish now running ....');

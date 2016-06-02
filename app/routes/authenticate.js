@@ -44,7 +44,7 @@ module.exports = function(req, res, next) {
           next.ifError(new restify.InternalServerError('failed while saving to database'));
         }
 
-        req.log.trace('[%s]\'s lastVisit = %s', user.name, user.lastVisit);
+        req.log.info('[%s]\'s lastVisit = %s', user.name, user.lastVisit);
         return next(res.send({
           success: true,
           message: 'enjoy tokenizing :)',

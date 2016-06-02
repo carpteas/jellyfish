@@ -2,11 +2,10 @@
 
 var restify         = require('restify');
 
-var config          = require('config.js');
 var util            = require('util.js');
 
 module.exports = function(req, res, next) {
-  // config.pathRegex === /^\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/
+  // regex: /^\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/
   if (req.params[2] !== '') {
     var subs = req.params[2].split('\/');
     subs.forEach(function(sub) {
@@ -21,13 +20,10 @@ module.exports = function(req, res, next) {
   // e.g. js
   req.fileext = req.params[0];
 
-  req.destination = req.username + ':' +
-                    req.filepath + (req.filepath === '/' ? '' : '/') +
-                    req.filename + '.' + req.fileext;
-  req.log.info('%s', req.destination);
-
-  req.random = util.hash(req.destination, config.s3Bucket);
-  req.key = req.filename + '.' + req.fileext;
+  req.random = util.getRandom(req.filepath, util.getBucket(req.username));
+  req.key = util.getKey(req.filename, req.fileext);
+  req.log.info('%s', req.username + ':' + req.filepath + (req.filepath === '/' ? '' : '/') + req.key);
+  req.log.info('%s', req.random);
 
   return next();
 };

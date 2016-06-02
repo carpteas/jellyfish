@@ -21,6 +21,13 @@ module.exports = function(req, res, next) {
       next.ifError(new restify.InternalServerError('failed while saving to database'));
     }
 
-    return next(res.send({ success: true }));
+    util.s3.createBucket({Bucket: util.getBucket(one.name)}, function(err) {
+      if (err) {
+        req.log.error(err, 'failed on S3.createBucket()');
+        next.ifError(new restify.InternalServerError('failed while creating S3 object'));
+      }
+
+      return next(res.send({ success: true }));
+    });
   });
 };
