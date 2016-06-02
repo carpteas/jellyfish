@@ -35,19 +35,20 @@ const S3 = new aws.S3();
 module.exports.s3 = S3;
 LOGGER.info('s3 setup ready ....');
 
-module.exports.hash = function(password, salt) {
+function hash(password, salt) {
   var hash = crypto.createHmac(config.hmac, salt);
   hash.update(password);
 
   return hash.digest('hex');
-};
+}
+module.exports.hash = hash;
 
 module.exports.getBucket = function(username) {
-  return 'jellyfish-carpteas-' + username;
+  return hash(username, 'jellyfish').substr(0, 6) + '-' + username;
 };
 
 module.exports.getRandom = function(filepath, bucket) {
-  return module.exports.hash(filepath, bucket);
+  return hash(filepath, bucket);
 };
 
 module.exports.getKey = function(filename, fileext) {
