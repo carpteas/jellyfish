@@ -3,7 +3,7 @@
 var file_manager 	= require('app/models/file_manager.js');
 
 module.exports = function(req, res, next) {
-  file_manager.checkRandom(req.random, next, function(isExisting) {
+  file_manager.isExisting(req.random, req.filename, req.fileext, next, function(isExisting) {
     if (!isExisting) {
       file_manager.createFile(req.random, req.username, req.filepath, req.filename, req.fileext, next, function() {
         file_manager.signOperation('putObject', req.username, req.random, req.key, next, res);

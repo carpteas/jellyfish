@@ -6,8 +6,8 @@ var File            = require('app/models/file.js');
 var config          = require('config.js');
 var util            = require('util.js');
 
-module.exports.checkRandom = function(random, next, callback) {
-  File.count({ randomness: random }, function(err, count) {
+module.exports.isExisting = function(random, name, ext, next, callback) {
+  File.count({ randomness: random, name: name, ext: ext }, function(err, count) {
     if (err) {
       util.logger.error(err, 'failed on File.count()');
       next.ifError(new restify.InternalServerError('failed while reading from database'));

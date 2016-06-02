@@ -20,7 +20,7 @@ module.exports = function(req, res, next) {
   // e.g. js
   req.fileext = req.params[0];
 
-  req.random = util.getRandom(req.filepath, util.getBucket(req.username));
+  req.random = util.getRandom(req.filepath, req.username);
   req.key = util.getKey(req.filename, req.fileext);
   req.log.info('%s', req.username + ':' + req.filepath + (req.filepath === '/' ? '' : '/') + req.key);
   req.log.info('%s', req.random);
