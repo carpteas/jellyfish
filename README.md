@@ -25,11 +25,7 @@ $ npm start
 GET: /
 
 GET: /asset/[EXT]/[NAME]/[PATH]?u=[USER]
-
-e.g. 
-```
-/asset/jpg/flower/house/backyard/garden?u=richard
-```
+>/asset/jpg/flower/house/backyard/garden?u=richard
 
 POST: /api/authenticate
 
@@ -50,11 +46,7 @@ GET: /api/list
         x-access-token: [TOKEN]
 
 PUT: /api/[EXT]/[NAME]/[PATH]
-
-e.g. 
-```
-/api/jpg/flower/house/backyard/garden
-```
+>/api/jpg/flower/house/backyard/garden
 
     request header
         x-access-token: [TOKEN]
@@ -72,11 +64,7 @@ PUT: [PUT_URL_TO_S3]
         file content
 
 DELETE: /api/[EXT]/[NAME]/[PATH]
-
-e.g.
-```
-/api/jpg/blank/
-```
+>/api/jpg/blank/
 
     request header
         x-access-token: [TOKEN]
