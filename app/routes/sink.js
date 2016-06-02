@@ -11,7 +11,7 @@ module.exports = function(req, res, next) {
     } else {
       req.log.warn('[%s]/%s.%s already exists, UPDATE instead of CREATE', req.random, req.filename, req.fileext);
 
-      file_manager.updateFile(req.random, next, function() {
+      file_manager.updateFile(req.random, req.filename, req.fileext, next, function() {
         file_manager.signOperation('putObject', req.username, req.random, req.key, next, res);
       });
     }

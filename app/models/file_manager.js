@@ -48,8 +48,8 @@ module.exports.createFile = function(random, username, path, name, ext, next, ca
   });
 };
 
-module.exports.updateFile = function(random, next, callback) {
-  File.findOne({ randomness: random }, function(err, file) {
+module.exports.updateFile = function(random, name, ext, next, callback) {
+  File.findOne({ randomness: random, name: name, ext: ext }, function(err, file) {
     if (err) {
       util.logger.error(err, 'failed on File.findOne()');
       next.ifError(new restify.InternalServerError('failed while reading from database'));
@@ -67,8 +67,8 @@ module.exports.updateFile = function(random, next, callback) {
   });
 };
 
-module.exports.deleteFile = function(bucket, random, key, next, res) {
-  File.remove({ randomness: random }, function(err, file) {
+module.exports.deleteFile = function(bucket, random, name, ext, key, next, res) {
+  File.remove({ randomness: random, name: name, ext: ext }, function(err, file) {
     if (err) {
       util.logger.error(err, 'failed on File.remove()');
       next.ifError(new restify.InternalServerError('failed while saving to database'));
@@ -76,7 +76,7 @@ module.exports.deleteFile = function(bucket, random, key, next, res) {
 
     util.s3.deleteObjects({
       Bucket: util.getBucket(bucket),
-      Delete: { Objects: [{ Key: random + '/' + key }, { Key: random }] }
+      Delete: { Objects: [{ Key: random + '/' + key }] }
     }, function(err, data) {
         if (err) {
           util.logger.error(err, 'failed on S3.deleteObjects()');
