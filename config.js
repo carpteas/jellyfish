@@ -16,5 +16,5 @@ module.exports = {
   'writeRegex': /^\/\bapi\b\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
   'port': 8888,
   'secret': uuid.v4(),
-  's3Vanish': 10
+  's3Vanish': 30
 };
