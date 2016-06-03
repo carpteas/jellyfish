@@ -3,7 +3,7 @@
 var jwt             = require('jsonwebtoken');
 var restify         = require('restify');
 
-var User            = require('app/models/user.js');
+var accounts        = require('app/facades/accounts.js');
 var config          = require('config.js');
 var util            = require('util.js');
 
@@ -12,12 +12,7 @@ module.exports = function(req, res, next) {
     next.ifError(new restify.BadRequestError('missing either username or password'));
   }
 
-  User.findOne({ name: req.params['username'] }, function(err, user) {
-    if (err) {
-      req.log.error(err, 'failed on User.findOne()');
-      next.ifError(new restify.InternalServerError('failed while reading from database'));
-    }
-
+  accounts.read(req.params['username'], next, function(user) {
     if (!user) {
       return next(res.send({ success: false, message: 'authentication failed: username not found!' }));
     }
@@ -38,12 +33,8 @@ module.exports = function(req, res, next) {
 
       user.lastToken = token;
       user.lastVisit = new Date;
-      user.save(function(err) {
-        if (err) {
-          req.log.error(err, 'failed on User.save()');
-          next.ifError(new restify.InternalServerError('failed while saving to database'));
-        }
 
+      accounts.update(user, next, function() {
         req.log.info('[%s]\'s lastVisit = %s', user.name, user.lastVisit);
         return next(res.send({
           success: true,

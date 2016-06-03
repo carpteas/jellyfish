@@ -3,13 +3,13 @@
 var jwt             = require('jsonwebtoken');
 var restify         = require('restify');
 
-var User            = require('app/models/user.js');
+var accounts        = require('app/facades/accounts.js');
 var config          = require('config.js');
 
 module.exports = function(req, res, next) {
   var token = req.headers['x-access-token'];
 
-  if (!token) {
+  if (!Boolean(token)) {
     next.ifError(new restify.UnauthorizedError('no token provided :('));
   }
 
@@ -18,12 +18,7 @@ module.exports = function(req, res, next) {
       next.ifError(new restify.ForbiddenError('failed to verify token :('));
     }
 
-    User.findOne({ name: decoded.username }, function(err, user) {
-      if (err) {
-        req.log.error(err, 'failed on User.findOne()');
-        next.ifError(new restify.InternalServerError('failed while reading from database'));
-      }
-
+    accounts.read(decoded.username, next, function(user) {
       if (!user) {
         next.ifError(new restify.ForbiddenError('username no longer valid :('));
       }

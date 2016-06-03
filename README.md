@@ -1,11 +1,13 @@
 # jellyfish
 
-The "jellyfish" is an *unlimited* storage service for all kinds of static web resources. Once stored, every single asset will be *proxied* by CDN automatically. There is a reference site(jellyfish.carpteas.com) running to play with. Key components consisting the service are:
+The "jellyfish" is an *unlimited* storage service for all kinds of static web resources. Once stored, every single asset will be *proxied* by CDN automatically. With RESTful API provided, check out the reference site(jellyfish.carpteas.com) and start playing with it. Key components contributing to this cloud-based service are:
 
   - Amazon S3
   - CloudFlare
   - Heroku
-  - Json Web Token
+  - JSON Web Tokens
+  - Postman
+  - mongoDB
   - Node.js
 
 ### Version
@@ -70,7 +72,9 @@ DELETE: /api/[EXT]/[NAME]/[PATH]
         x-access-token: [TOKEN]
 
 ### Todos
+ - bluebird for promises
  - bulk upload of assets
+ - https instead of http
  - image transformation on demand
 
 License

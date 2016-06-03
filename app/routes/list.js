@@ -1,9 +1,7 @@
 'use strict';
 
-var File            = require('app/models/file.js');
+var assets     	    = require('app/facades/assets.js');
 
 module.exports = function(req, res, next) {
-  File.find({ username: req.username }, function(err, files) {
-    return next(res.send(files));
-  });
+  assets.search({ username: req.username }, next, res);
 };

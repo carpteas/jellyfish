@@ -6,30 +6,7 @@ var File            = require('app/models/file.js');
 var config          = require('config.js');
 var util            = require('util.js');
 
-module.exports.isExisting = function(random, name, ext, next, callback) {
-  File.count({ randomness: random, name: name, ext: ext }, function(err, count) {
-    if (err) {
-      util.logger.error(err, 'failed on File.count()');
-      next.ifError(new restify.InternalServerError('failed while reading from database'));
-    }
-
-    callback(count !== 0);
-  });
-};
-
-module.exports.readFile = function(bucket, random, key, next, res) {
-  util.logger.info('reading [%s]/%s', random, key);
-
-  var file = util.s3.getObject({ Bucket: bucket, Key: random + '/' + key });
-  file.on('error', function(err) {
-    util.logger.error(err, 'failed on S3.getObject()');
-    next.ifError(new restify.NotFoundError('file not found inside S3'));
-  });
-
-  file.createReadStream().pipe(res);
-};
-
-module.exports.createFile = function(random, username, path, name, ext, next, callback) {
+module.exports.create = function(random, username, path, name, ext, next, callback) {
   var one = new File({
     randomness: random,
     username: username,
@@ -48,7 +25,19 @@ module.exports.createFile = function(random, username, path, name, ext, next, ca
   });
 };
 
-module.exports.updateFile = function(random, name, ext, next, callback) {
+module.exports.read = function(bucket, random, key, next, res) {
+  util.logger.info('reading [%s]/%s', random, key);
+
+  var file = util.s3.getObject({ Bucket: bucket, Key: random + '/' + key });
+  file.on('error', function(err) {
+    util.logger.error(err, 'failed on S3.getObject()');
+    next.ifError(new restify.NotFoundError('file not found inside S3'));
+  });
+
+  file.createReadStream().pipe(res);
+};
+
+module.exports.update = function(random, name, ext, next, callback) {
   File.findOne({ randomness: random, name: name, ext: ext }, function(err, file) {
     if (err) {
       util.logger.error(err, 'failed on File.findOne()');
@@ -67,7 +56,7 @@ module.exports.updateFile = function(random, name, ext, next, callback) {
   });
 };
 
-module.exports.deleteFile = function(bucket, random, name, ext, key, next, res) {
+module.exports.delete = function(bucket, random, name, ext, key, next, res) {
   File.remove({ randomness: random, name: name, ext: ext }, function(err, file) {
     if (err) {
       util.logger.error(err, 'failed on File.remove()');
@@ -88,7 +77,24 @@ module.exports.deleteFile = function(bucket, random, name, ext, key, next, res) 
   });
 };
 
-module.exports.signOperation = function(type, bucket, random, key, next, res) {
+module.exports.exist = function(random, name, ext, next, callback) {
+  File.count({ randomness: random, name: name, ext: ext }, function(err, count) {
+    if (err) {
+      util.logger.error(err, 'failed on File.count()');
+      next.ifError(new restify.InternalServerError('failed while reading from database'));
+    }
+
+    callback(count !== 0);
+  });
+};
+
+module.exports.search = function(criteria, next, res) {
+  File.find(criteria, function(err, files) {
+    return next(res.send(files));
+  });
+};
+
+module.exports.sign = function(operation, bucket, random, key, next, res) {
   var options = {
     Bucket: bucket,
     Key: random + '/' + key,
@@ -96,7 +102,7 @@ module.exports.signOperation = function(type, bucket, random, key, next, res) {
     ACL: 'private'
   };
 
-  util.s3.getSignedUrl(type, options, function(err, data) {
+  util.s3.getSignedUrl(operation, options, function(err, data) {
     if (err) {
       util.logger.error(err, 'failed on S3.getSignedUrl()');
       next.ifError(new restify.InternalServerError('failed while signing S3 operation'));

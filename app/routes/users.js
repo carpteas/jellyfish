@@ -1,9 +1,7 @@
 'use strict';
 
-var User            = require('app/models/user.js');
+var accounts        = require('app/facades/accounts.js');
 
 module.exports = function(req, res, next) {
-  User.find({}, function(err, users) {
-    return next(res.send(users));
-  });
+  accounts.search({}, next, res);
 };
