@@ -27,7 +27,7 @@ $ npm start
 GET: /
 
 GET: /asset/[EXT]/[NAME]/[PATH]?u=[USER]
->/asset/jpg/flower/house/backyard/garden?u=richard
+>/asset/jpg/flower/house/backyard/garden?u=richard.peng
 
 POST: /api/authenticate
 
@@ -57,7 +57,7 @@ PUT: /api/[EXT]/[NAME]/[PATH]
 
 PUT_URL_TO_S3's sample
 ```
-https://e52032-richard.s3-ap-northeast-1.amazonaws.com/280d5ff8f2229ffb782eede1e8c7745b22b86db5a59967911164c8da59a327ce/flight.jpg?AWSAccessKeyId=AKIAJQ75TXVUWG3LPMVQ&Expires=1464881612&Signature=IwUv5vB4mmLOaO2jqr1%2B%2BOQju6w%3D&x-amz-acl=private
+https://e52032-richard.peng.s3-ap-northeast-1.amazonaws.com/280d5ff8f2229ffb782eede1e8c7745b22b86db5a59967911164c8da59a327ce/flight.jpg?AWSAccessKeyId=AKIAJQ75TXVUWG3LPMVQ&Expires=1464881612&Signature=IwUv5vB4mmLOaO2jqr1%2B%2BOQju6w%3D&x-amz-acl=private
 ```
 
 PUT: [PUT_URL_TO_S3]
@@ -66,7 +66,7 @@ PUT: [PUT_URL_TO_S3]
         file content
 
 DELETE: /api/[EXT]/[NAME]/[PATH]
->/api/jpg/blank/
+>/api/jpg/put-into-root-directory-is-also-valid/
 
     request header
         x-access-token: [TOKEN]
