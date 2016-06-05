@@ -15,9 +15,11 @@ module.exports = {
   'logError': './jellyfish-error.log',
   'logLevel': 'error',
   'readRegex': /^\/\basset\b\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
+  'redisHost': 'localhost',
+  'redisPort': '6379',
+  'redisPass': '',
   'writeRegex': /^\/\bapi\b\/([\w\.~-]+)\/([\w\.~-]+)\/(.*)/,
   'port': 8888,
-  'redis': 'localhost:6379',
   'secret': uuid.v4(),
   's3Vanish': 30
 };

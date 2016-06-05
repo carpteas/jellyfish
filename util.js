@@ -36,7 +36,11 @@ const S3 = new aws.S3();
 module.exports.s3 = S3;
 LOGGER.info('s3 setup ready ....');
 
-const EMITTER = emitter(process.env.REDIS || config.redis);
+const EMITTER = emitter({
+  host: process.env.REDIS_HOST || config.redisHost,
+  port: process.env.REDIS_PORT || config.redisPort,
+  auth: process.env.REDIS_PASS || config.redisPass
+});
 module.exports.emitter = EMITTER;
 LOGGER.info('socket.io-emitter setup ready ....');
 
