@@ -3,6 +3,7 @@
 var aws             = require('aws-sdk');
 var bunyan          = require('bunyan');
 var crypto          = require('crypto');
+var emitter         = require('socket.io-emitter');
 
 var config          = require('config.js');
 
@@ -34,6 +35,10 @@ aws.config.update({
 const S3 = new aws.S3();
 module.exports.s3 = S3;
 LOGGER.info('s3 setup ready ....');
+
+const BACKWSS = emitter(process.env.REDIS || config.redis);
+module.exports.backwss = BACKWSS;
+LOGGER.info('socket.io-emitter setup ready ....');
 
 function hash(password, salt) {
   var hash = crypto.createHmac(config.hmac, salt);
