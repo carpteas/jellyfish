@@ -36,8 +36,8 @@ const S3 = new aws.S3();
 module.exports.s3 = S3;
 LOGGER.info('s3 setup ready ....');
 
-const BACKWSS = emitter(process.env.REDIS || config.redis);
-module.exports.backwss = BACKWSS;
+const EMITTER = emitter(process.env.REDIS || config.redis);
+module.exports.emitter = EMITTER;
 LOGGER.info('socket.io-emitter setup ready ....');
 
 function hash(password, salt) {

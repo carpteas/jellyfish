@@ -3,7 +3,7 @@
 var util            = require('util.js');
 
 module.exports = function(req, res, next) {
-  util.backwss.emit('blitline', req.params['results']);
+  util.emitter.emit('blitline', req.params['results']);
 
   return next();
 };
