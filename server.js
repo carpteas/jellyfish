@@ -5,6 +5,7 @@ var morgan          = require('morgan');
 var restify         = require('restify');
 
 var authenticate    = require('app/routes/authenticate.js');
+var blitline        = require('app/routes/blitline.js');
 var index           = require('app/routes/index.js');
 var files           = require('app/routes/files.js');
 var list            = require('app/routes/list.js');
@@ -34,6 +35,7 @@ api.use(
   restify.bodyParser({ mapParams: true }));
 api.get('/', index);
 api.get(config.readRegex, query, validate, load);
+api.post('/blitline', blitline);
 api.post('/register', administrate, register);
 api.get('/users', administrate, users);
 api.get('/files', administrate, files);

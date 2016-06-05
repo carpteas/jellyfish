@@ -11,6 +11,7 @@ module.exports = function(req, res, next) {
   }
 
   req.username = req.query.u;
+  req.extrargs = req.query.x;
 
   return next();
 };
