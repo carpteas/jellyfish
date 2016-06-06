@@ -116,41 +116,12 @@ module.exports.sign = function(operation, bucket, random, key, next, res) {
 
 module.exports.transform = function(bucket, random, key, extra, next, res) {
   util.logger.info('reading [%s]/%s with extrargs[%s]', random, key, extra);
-/*
-// blitline url
-{
-    application_id: 'YOUR_APP_ID',
-    postback_url: config.host + '/blitline';,
-    src: 'http://cdn.blitline.com/filters/boys.jpeg',
-// metas
-    src_data: { colorspace: 'srgb' },
-    get_exif: true,
-    v: 1.20,
-// functions
-    functions: [
-        {
-            name: 'resize_to_fit',
-            params: {
-                width: 100,
-                autosharpen: true
-            },
-            save: {
-                image_identifier: 'MY_CLIENT_ID'
-            }
-        }
-    ]
-}
-*/
+
   var pending = extra;
-
   var ws = wsClient(process.env.BACK_WSS || config.backwss);
-  ws.on('blitline', function(results) {
-    if (results['job_id'] === pending) {
-      if (Boolean(results['errors'])) {
-        util.logger.error(results['errors']);
-        next.ifError(new restify.InternalServerError(results['errors']));
-      }
 
+  ws.on('success', function(job) {
+    if (job === pending) {
       http.get({
         host: 's-media-cache-ak0.pinimg.com',
         path: '/originals/fb/be/16/fbbe160f8974fada59e833b93fec2598.jpg'
@@ -163,5 +134,9 @@ module.exports.transform = function(bucket, random, key, extra, next, res) {
         response.pipe(res);
       });
     }
+  });
+
+  ws.on('failure', function(error) {
+    if (error.job === pending) next.ifError(new restify.BadRequestError(error.reason));
   });
 };

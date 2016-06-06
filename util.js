@@ -28,6 +28,14 @@ const LOGGER = bunyan.createLogger({
 module.exports.logger = LOGGER;
 LOGGER.info('logger setup ready ....');
 
+const EMITTER = emitter(redis(
+  process.env.REDIS_PORT || config.redisPort,
+  process.env.REDIS_HOST || config.redisHost, {
+    auth_pass: process.env.REDIS_PASS || config.redisPass
+}));
+module.exports.emitter = EMITTER;
+LOGGER.info('socket.io-emitter setup ready ....');
+
 aws.config.update({
   accessKeyId: config.awsAccess,
   secretAccessKey: process.env.SECRET_ACCESS || config.awsSecret,
@@ -36,14 +44,6 @@ aws.config.update({
 const S3 = new aws.S3();
 module.exports.s3 = S3;
 LOGGER.info('s3 setup ready ....');
-
-const EMITTER = emitter(redis(
-  process.env.REDIS_PORT || config.redisPort,
-  process.env.REDIS_HOST || config.redisHost, {
-    auth_pass: process.env.REDIS_PASS || config.redisPass
-}));
-module.exports.emitter = EMITTER;
-LOGGER.info('socket.io-emitter setup ready ....');
 
 function hash(password, salt) {
   var hash = crypto.createHmac(config.hmac, salt);
