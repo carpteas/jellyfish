@@ -8,6 +8,7 @@ module.exports = {
   'awsRegion': 'ap-northeast-1',
   'awsSecret': '',
   'backwss': '',
+  'blitline': '',
   'database': 'mongodb://localhost:27017/test',
   'expiresIn': '30m',
   'host': 'http://jellyfish.carpteas.com',

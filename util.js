@@ -4,6 +4,7 @@ var aws             = require('aws-sdk');
 var bunyan          = require('bunyan');
 var crypto          = require('crypto');
 var redis           = require('redis').createClient;
+var Blitline        = require('simple_blitline_node');
 var emitter         = require('socket.io-emitter');
 
 var config          = require('config.js');
@@ -27,6 +28,10 @@ const LOGGER = bunyan.createLogger({
 });
 module.exports.logger = LOGGER;
 LOGGER.info('logger setup ready ....');
+
+const BLITLINE = new Blitline();
+module.exports.blitline = BLITLINE;
+LOGGER.info('blitline setup ready ....');
 
 const EMITTER = emitter(redis(
   process.env.REDIS_PORT || config.redisPort,

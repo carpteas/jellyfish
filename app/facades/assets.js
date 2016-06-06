@@ -117,26 +117,46 @@ module.exports.sign = function(operation, bucket, random, key, next, res) {
 module.exports.transform = function(bucket, random, key, extra, next, res) {
   util.logger.info('reading [%s]/%s with extrargs[%s]', random, key, extra);
 
-  var pending = extra;
-  var ws = wsClient(process.env.BACK_WSS || config.backwss);
-
-  ws.on('success', function(job) {
-    if (job === pending) {
-      http.get({
-        host: 's-media-cache-ak0.pinimg.com',
-        path: '/originals/fb/be/16/fbbe160f8974fada59e833b93fec2598.jpg'
-      }, function (response) {
-        response.on('error', function(err) {
-          util.logger.error(err, 'failed on retrieving the transformed result');
-          next.ifError(new restify.InternalServerError('failure during file\'s transformation'));
-        });
-
-        response.pipe(res);
-      });
-    }
+  util.blitline.addJob({
+    'application_id': config.blitline,
+    'src': 'http://s3-' + config.awsRegion + '.amazonaws.com/' + bucket + '/' + random + '/' + key,
+    'postback_url': config.host + '/blitline',
+    'functions': [
+            {
+                'name': 'resize_to_fit',
+                'params': {
+                    'width': 100
+                },
+                'save': {
+                    'image_identifier': 'MY_CLIENT_ID'
+                }
+            }
+    ]
   });
 
-  ws.on('failure', function(error) {
-    if (error.job === pending) next.ifError(new restify.BadRequestError(error.reason));
+  util.blitline.postJobs(function(blitline) {
+    if (!Boolean(blitline.body.results.error)) {
+      next.ifError(new restify.BadRequestError(blitline.body.results.error));
+    }
+
+    var pending = blitline.body.results.job_id;
+    var ws = wsClient(process.env.BACK_WSS || config.backwss);
+
+    ws.on('success', function(job) {
+      if (job === pending) {
+        http.get(blitline.body.results.images[0].s3_url, function(response) {
+          response.on('error', function(err) {
+            util.logger.error(err, 'failed on retrieving the transformed result');
+            next.ifError(new restify.InternalServerError('failure during file\'s transformation'));
+          });
+
+          response.pipe(res);
+        });
+      }
+    });
+
+    ws.on('failure', function(error) {
+      if (error.job === pending) next.ifError(new restify.BadRequestError(error.reason));
+    });
   });
 };
