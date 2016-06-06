@@ -135,16 +135,16 @@ module.exports.transform = function(bucket, random, key, extra, next, res) {
   });
 
   util.blitline.postJobs(function(blitline) {
-    if (!Boolean(blitline.body.results.error)) {
-      next.ifError(new restify.BadRequestError(blitline.body.results.error));
+    if (!Boolean(blitline.results.error)) {
+      next.ifError(new restify.BadRequestError(blitline.results.error));
     }
 
-    var pending = blitline.body.results.job_id;
+    var pending = blitline.results.job_id;
     var ws = wsClient(process.env.BACK_WSS || config.backwss);
 
     ws.on('success', function(job) {
       if (job === pending) {
-        http.get(blitline.body.results.images[0].s3_url, function(response) {
+        http.get(blitline.results.images[0].s3_url, function(response) {
           response.on('error', function(err) {
             util.logger.error(err, 'failed on retrieving the transformed result');
             next.ifError(new restify.InternalServerError('failure during file\'s transformation'));
