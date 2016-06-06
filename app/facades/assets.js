@@ -155,9 +155,5 @@ module.exports.transform = function(bucket, random, key, extra, next, res) {
     ws.on('failure', function(error) {
       if (pending === error.job) next.ifError(new restify.BadRequestError(error.reason));
     });
-
-    ws.on('audit', function(log) {
-      next.ifError(new restify.BadRequestError(log));
-    });
   });
 };
