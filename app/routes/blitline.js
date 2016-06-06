@@ -6,7 +6,7 @@ var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   try {
-    util.emitter.emit('audit', JSON.stringify(req.body);
+    util.emitter.emit('audit', JSON.stringify(req.body));
 /*
     var result = JSON.parse(req.body).results[0];
     if (!Boolean(result) || !Boolean(result.job_id)) throw new Error('syntax bad');
