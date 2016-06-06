@@ -121,14 +121,11 @@ module.exports.transform = function(bucket, random, key, extra, next, res) {
     'application_id': process.env.BLITLINE || config.blitline,
     'src': 'http://s3-' + config.awsRegion + '.amazonaws.com/' + bucket + '/' + random + '/' + key,
     'postback_url': config.host + '/blitline',
-    'functions': [
-            {
-                'name': 'resize_to_fit',
-                'params': {
-                    'width': 100
-                }
-            }
-    ]
+    'functions': [{
+      'name': 'resize_to_fit',
+      'params': { 'width': 100 },
+      'save': { 'image_identifier': key }
+    }]
   });
 
   util.blitline.postJobs(function(blitline) {
