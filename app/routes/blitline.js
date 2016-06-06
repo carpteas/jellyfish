@@ -5,7 +5,7 @@ var restify         = require('restify');
 var util            = require('util.js');
 
 module.exports = function(req, res, next) {
-util.emitter.emit('audit', JSON.parse(req.body));
+util.emitter.emit('audit', JSON.stringify(req.body));
 return next(res.send({ success: true }));
 /*
   try {
