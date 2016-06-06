@@ -126,9 +126,6 @@ module.exports.transform = function(bucket, random, key, extra, next, res) {
                 'name': 'resize_to_fit',
                 'params': {
                     'width': 100
-                },
-                'save': {
-                    'image_identifier': 'MY_CLIENT_ID'
                 }
             }
     ]
