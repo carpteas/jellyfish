@@ -6,6 +6,8 @@ var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   try {
+    util.emitter.emit('audit', req.body);
+/*
     var result = JSON.parse(req.body).results[0];
     if (!Boolean(result) || !Boolean(result.job_id)) throw new Error('syntax bad');
 
@@ -14,9 +16,9 @@ module.exports = function(req, res, next) {
     } else {
       util.emitter.emit('failure', { job: result.job_id, reason: result.errors[0] });
     }
-
+*/
     return next(res.send({ success: true }));
   } catch (err) {
-    next.ifError(new restify.BadRequestError(req.body));
+    next.ifError(new restify.BadRequestError('request body invalid'));
   }
 };
