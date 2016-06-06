@@ -17,6 +17,6 @@ module.exports = function(req, res, next) {
 
     return next(res.send({ success: true }));
   } catch (err) {
-    next.ifError(new restify.BadRequestError('request body invalid'));
+    next.ifError(new restify.BadRequestError(req.body));
   }
 };
