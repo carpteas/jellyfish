@@ -118,7 +118,7 @@ module.exports.transform = function(bucket, random, key, extra, next, res) {
   util.logger.info('reading [%s]/%s with extrargs[%s]', random, key, extra);
 
   util.blitline.addJob({
-    'application_id': config.blitline,
+    'application_id': process.env.BLITLINE || config.blitline,
     'src': 'http://s3-' + config.awsRegion + '.amazonaws.com/' + bucket + '/' + random + '/' + key,
     'postback_url': config.host + '/blitline',
     'functions': [
