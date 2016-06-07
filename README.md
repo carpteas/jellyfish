@@ -1,6 +1,6 @@
 # jellyfish
 
-The "jellyfish" is an *unlimited* storage service for all kinds of static web resources. Once stored, every single asset will be *proxied* by CDN automatically. With RESTful API provided, check out the reference site(jellyfish.carpteas.com) and start playing with it. Key components contributing to this cloud-based service are:
+The "jellyfish" is an *unlimited* storage service for all kinds of static web resources. Once stored, every single asset will be *proxied* by CDN automatically. With RESTful API provided, check out the reference site http://jellyfish.carpteas.com and start playing with it. Key components contributing to this cloud-based service are:
 
   - Amazon S3
   - BLITLINE
@@ -84,7 +84,7 @@ BLITLINE_FUNCTION's sample: resize to 720x540
 %7B"name"%3A"resize"%2C"params"%3A%7B"width"%3A720%2C"height"%3A540%7D%2C"save"%3A%7B"image_identifier"%3A"demo"%7D%7D
 ```
 
-BLITLINE_FUNCTION's sample: add 4 lines + watermark on a 720x540 image
+BLITLINE_FUNCTION's sample: add lines from 4 corners torward center + watermark on a 720x540 image
 ```
 %7B"name"%3A"line"%2C"params"%3A%7B"x"%3A10%2C"y"%3A10%2C"x1"%3A100%2C"y1"%3A100%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A710%2C"y"%3A10%2C"x1"%3A610%2C"y1"%3A100%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A10%2C"y"%3A530%2C"x1"%3A100%2C"y1"%3A430%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A710%2C"y"%3A530%2C"x1"%3A610%2C"y1"%3A430%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"watermark"%2C"params"%3A%7B"text"%3A"jellyfish"%7D%2C"save"%3A%7B"image_identifier"%3A"demo"%7D%7D%5D%7D%5D%7D%5D%7D%5D%7D
 ```
