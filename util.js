@@ -42,8 +42,8 @@ module.exports.emitter = EMITTER;
 LOGGER.info('socket.io-emitter setup ready ....');
 
 aws.config.update({
-  accessKeyId: config.awsAccess,
-  secretAccessKey: process.env.SECRET_ACCESS || config.awsSecret,
+  accessKeyId: process.env.AWS_ACCESS || config.awsAccess,
+  secretAccessKey: process.env.AWS_SECRET || config.awsSecret,
   region: config.awsRegion
 });
 const S3 = new aws.S3();

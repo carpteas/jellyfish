@@ -9,10 +9,11 @@ module.exports = function(req, res, next) {
   var awsSecret = req.headers['x-access-password'];
 
   if (!Boolean(awsAccess) || !Boolean(awsSecret)) {
-    next.ifError(new restify.BadRequestError('missing either username or password'));
+    next.ifError(new restify.BadRequestError('missing administrative rights'));
   }
 
-  if (awsAccess !== config.awsAccess || awsSecret !== (process.env.SECRET_ACCESS || config.awsSecret)) {
+  if (awsAccess !== (process.env.AWS_ACCESS || config.awsAccess) ||
+      awsSecret !== (process.env.AWS_SECRET || config.awsSecret)) {
     next.ifError(new restify.ForbiddenError('not allowed, you bastard'));
   }
 
