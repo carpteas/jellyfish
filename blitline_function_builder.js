@@ -6,7 +6,7 @@ var resize = {
 
 var watermark = {
   name: 'watermark',
-  params: { text: '2016 jellyfish trademark' },
+  params: { text: 'jellyfish' },
   save: { image_identifier: 'demo' }
 }
 
@@ -34,7 +34,7 @@ var line1 = {
   functions: [line2]
 }
 
-var functions = resize;
+var functions = line1;
 
 console.log('--------------');
 
