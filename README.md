@@ -1,6 +1,6 @@
 # jellyfish
 
-The "jellyfish" is an *unlimited* storage service for all kinds of static web resources. Once stored, every single asset will be *proxied* by CDN automatically. With RESTful API provided, check out the reference site http://jellyfish.carpteas.com and start playing with it. Key components contributing to this cloud-based service are:
+The "jellyfish" is an *unlimited* storage service for all kinds of static web resources. Once stored, every single asset will be *proxied* by CDN automatically. BLITLINE as the transformation engine, enables any stored image to be processed on the fly, then cached on CDN as long as subsequent requests hold the same RESTful url. Demonstrating those RESTful APIs the "jellyfish" provides, the reference site http://jellyfish.carpteas.com is up and running; feel free to play with it. Key components contributing to this cloud-based service are:
 
   - Amazon S3
   - BLITLINE
@@ -20,7 +20,7 @@ The "jellyfish" is an *unlimited* storage service for all kinds of static web re
 jellyfish requires [Node.js](https://nodejs.org/) v4.4.5+ to run.
 
 ```sh
-$ git clone [git-repository-url] jellyfish
+$ git clone git@github.com:carpteas/jellyfish.git
 $ cd jellyfish
 $ npm install
 $ npm start
@@ -74,8 +74,8 @@ DELETE: /api/[EXT]/[NAME]/[PATH]
     request header
         x-access-token: [TOKEN]
 
-### Transformations
-GET: /asset/[EXT]/[NAME]/[PATH]?u=[USER]&x=[BLITLINE_FUNCTION]
+### Transformation
+GET: /asset/[EXT]/[NAME]/[PATH]?u=[USER]**&x=[BLITLINE_FUNCTION]**
 
 BLITLINE_FUNCTION should be a url encoded json string. Nesting(chained) functions are supported but each depth holds exact one function. Lastly, the most inner function must provide "image_identifier" to indicate the result. Check blitline_functions_builder.js for samples.
 
