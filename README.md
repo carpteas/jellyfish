@@ -3,12 +3,15 @@
 The "jellyfish" is an *unlimited* storage service for all kinds of static web resources. Once stored, every single asset will be *proxied* by CDN automatically. With RESTful API provided, check out the reference site(jellyfish.carpteas.com) and start playing with it. Key components contributing to this cloud-based service are:
 
   - Amazon S3
+  - BLITLINE
   - CloudFlare
   - Heroku
   - JSON Web Tokens
   - Postman
   - mongoDB
   - Node.js
+  - redis
+  - socket.io
 
 ### Version
 0.1.0
@@ -71,11 +74,27 @@ DELETE: /api/[EXT]/[NAME]/[PATH]
     request header
         x-access-token: [TOKEN]
 
+### Transformations
+GET: /asset/[EXT]/[NAME]/[PATH]?u=[USER]&x=[BLITLINE_FUNCTION]
+
+BLITLINE_FUNCTION should be a url encoded json string. Nesting(chained) functions are supported but each depth holds exact one function. Lastly, the most inner function must provide "image_identifier" to indicate the result. Check blitline_functions_builder.js for samples.
+
+BLITLINE_FUNCTION's sample: resize to 720x540
+```
+%7B"name"%3A"resize"%2C"params"%3A%7B"width"%3A720%2C"height"%3A540%7D%2C"save"%3A%7B"image_identifier"%3A"demo"%7D%7D
+```
+
+BLITLINE_FUNCTION's sample: add 4 lines + watermark on a 720x540 image
+```
+%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A10%2C"y"%3A10%2C"x1"%3A100%2C"y1"%3A100%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A710%2C"y"%3A10%2C"x1"%3A610%2C"y1"%3A100%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A10%2C"y"%3A530%2C"x1"%3A100%2C"y1"%3A430%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A710%2C"y"%3A530%2C"x1"%3A610%2C"y1"%3A430%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"watermark"%2C"params"%3A%7B"text"%3A"jellyfish"%7D%2C"save"%3A%7B"image_identifier"%3A"demo"%7D%7D%5D%7D%5D%7D%5D%7D%5D%7D
+```
+
+For all supported functions, go and check https://www.blitline.com/docs/functions.
+
 ### Todos
  - bluebird for promises
  - bulk upload of assets
  - https instead of http
- - image transformation on demand
 
 License
 ----
