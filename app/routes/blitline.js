@@ -6,13 +6,13 @@ var util            = require('util.js');
 
 module.exports = function(req, res, next) {
   try {
-    var json = JSON.parse(req.params['results']);
-    if (!Boolean(json.job_id)) throw new Error('id missing');
+    var results = JSON.parse(req.params['results']);
+    if (!Boolean(results.job_id)) throw new Error('job_id missing');
 
-    if (!Boolean(json.errors)) {
-      util.emitter.emit('success', json.job_id);
+    if (!Boolean(results.errors)) {
+      util.emitter.emit('success', results.job_id);
     } else {
-      util.emitter.emit('failure', { job: json.job_id, reason: json.errors[0] });
+      util.emitter.emit('failure', { job: results.job_id, reason: results.errors[0] });
     }
 
     return next(res.send({ success: true }));

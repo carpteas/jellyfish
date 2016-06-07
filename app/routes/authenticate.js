@@ -21,7 +21,6 @@ module.exports = function(req, res, next) {
       return next(res.send({ success: false, message: 'authentication failed: wrong password!' }));
     }
 
-    // JSON.stringify(user) yields "Converting circular structure to JSON" due to Date within User
     jwt.sign({ username: user.name, password: user.password }, config.secret, {
       algorithm: config.algorithm,
       expiresIn: config.expiresIn

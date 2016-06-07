@@ -115,17 +115,23 @@ module.exports.sign = function(operation, bucket, random, key, next, res) {
 };
 
 module.exports.transform = function(bucket, random, key, extra, next, res) {
-  util.logger.info('reading [%s]/%s with extrargs[%s]', random, key, extra);
+  var functions;
+  try {
+    var decoded = decodeURIComponent(extra);
+    if (decoded.indexOf('"image_identifier"') === -1) throw new Error('image_identifier missing');
+
+    functions = JSON.parse(decoded);
+
+    util.logger.info('reading [%s]/%s with extrargs %s', random, key, decoded);
+  } catch (err) {
+    next.ifError(new restify.BadRequestError('x=BLITLINE_FUNCTIONS_BAD'));
+  }
 
   util.blitline.addJob({
-    'application_id': process.env.BLITLINE || config.blitline,
-    'src': 'http://s3-' + config.awsRegion + '.amazonaws.com/' + bucket + '/' + random + '/' + key,
-    'postback_url': config.host + '/blitline',
-    'functions': [{
-      'name': 'resize_to_fit',
-      'params': { 'width': 100 },
-      'save': { 'image_identifier': key }
-    }]
+    application_id: process.env.BLITLINE || config.blitline,
+    src: 'http://s3-' + config.awsRegion + '.amazonaws.com/' + bucket + '/' + random + '/' + key,
+    postback_url: config.host + '/blitline',
+    functions: [functions]
   });
 
   util.blitline.postJobs(function(blitline) {
