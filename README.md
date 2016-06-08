@@ -77,16 +77,55 @@ DELETE: /api/[EXT]/[NAME]/[PATH]
 
 ### Transformation
 GET: /asset/[EXT]/[NAME]/[PATH]?u=[USER]**&x=[BLITLINE_FUNCTION]**
+>/asset/jpg/flower/?u=richard.peng&x=%7B"name"%3A"resize"%2C"params"%3A%7B"width"%3A720%2C"height"%3A540%7D%2C"save"%3A%7B"image_identifier"%3A"demo"%7D%7D
 
 BLITLINE_FUNCTION should be a url encoded json string. Nesting(chained) functions are supported but each depth needs to contain exact one function. Lastly, the most inner function must provide "image_identifier" to indicate the result. Check blitline_functions_builder.js for samples.
 
 BLITLINE_FUNCTION's sample: resize to 720x540
 ```
+var resize = {
+  name: 'resize',
+  params: { width: 720, height: 540 },
+  save: { image_identifier: 'demo' }
+}
+
+turns out to:
 %7B"name"%3A"resize"%2C"params"%3A%7B"width"%3A720%2C"height"%3A540%7D%2C"save"%3A%7B"image_identifier"%3A"demo"%7D%7D
 ```
 
 BLITLINE_FUNCTION's sample: add lines from 4 corners torward center + watermark on a 720x540 image
 ```
+var watermark = {
+  name: 'watermark',
+  params: { text: 'jellyfish' },
+  save: { image_identifier: 'demo' }
+}
+
+var line4 = {
+  name: 'line',
+  params: { x: 710, y: 530, x1: 610, y1: 430, width: 4, opacity: 0.5 },
+  functions: [watermark]
+}
+
+var line3 = {
+  name: 'line',
+  params: { x: 10, y: 530, x1: 100, y1: 430, width: 4, opacity: 0.5 },
+  functions: [line4]
+}
+
+var line2 = {
+  name: 'line',
+  params: { x: 710, y: 10, x1: 610, y1: 100, width: 4, opacity: 0.5 },
+  functions: [line3]
+}
+
+var line1 = {
+  name: 'line',
+  params: { x: 10, y: 10, x1: 100, y1: 100, width: 4, opacity: 0.5 },
+  functions: [line2]
+}
+
+turns out to:
 %7B"name"%3A"line"%2C"params"%3A%7B"x"%3A10%2C"y"%3A10%2C"x1"%3A100%2C"y1"%3A100%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A710%2C"y"%3A10%2C"x1"%3A610%2C"y1"%3A100%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A10%2C"y"%3A530%2C"x1"%3A100%2C"y1"%3A430%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"line"%2C"params"%3A%7B"x"%3A710%2C"y"%3A530%2C"x1"%3A610%2C"y1"%3A430%2C"width"%3A4%2C"opacity"%3A0.5%7D%2C"functions"%3A%5B%7B"name"%3A"watermark"%2C"params"%3A%7B"text"%3A"jellyfish"%7D%2C"save"%3A%7B"image_identifier"%3A"demo"%7D%7D%5D%7D%5D%7D%5D%7D%5D%7D
 ```
 
