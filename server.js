@@ -29,7 +29,6 @@ var api = restify.createServer({
 
 api.pre(morgan('tiny'));
 api.use(
-  restify.gzipResponse(),
   restify.CORS(),
   restify.requestLogger(),
   restify.queryParser({ mapParams: false }),
