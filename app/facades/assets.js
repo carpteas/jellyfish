@@ -30,13 +30,14 @@ module.exports.create = function(random, username, path, name, ext, next, callba
 module.exports.read = function(bucket, random, key, next, res) {
   util.logger.info('reading [%s]/%s', random, key);
 
-  var file = util.s3.getObject({ Bucket: bucket, Key: random + '/' + key });
-  file.on('error', function(err) {
-    util.logger.error(err, 'failed on S3.getObject()');
-    next.ifError(new restify.NotFoundError('file not found inside S3'));
+  util.s3.headObject({ Bucket: bucket, Key: random + '/' + key }, function(err, data) {
+    if (err) {
+      util.logger.error(err, 'failed on S3.headObject()');
+      next.ifError(new restify.NotFoundError('file not found inside S3'));
+    }
   });
 
-  file.createReadStream().pipe(res);
+  util.s3.getObject({ Bucket: bucket, Key: random + '/' + key }).createReadStream().pipe(res);
 };
 
 module.exports.update = function(random, name, ext, next, callback) {
